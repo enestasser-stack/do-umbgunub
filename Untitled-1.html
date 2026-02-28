@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belinay İçin Büyük Sürpriz 🎉</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(circle at center,#111,#000);
+    color:white;
+    text-align:center;
+    overflow:hidden;
+}
+
+.container{
+    background: rgba(255,255,255,0.08);
+    padding:40px;
+    border-radius:20px;
+    backdrop-filter: blur(10px);
+    width:90%;
+    max-width:500px;
+    z-index:2;
+}
+
+input{
+    padding:10px;
+    width:80%;
+    border:none;
+    border-radius:10px;
+    margin-top:15px;
+    font-size:16px;
+    text-align:center;
+}
+
+button{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:20px;
+    font-size:16px;
+    cursor:pointer;
+    background:white;
+    color:black;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+#surprise{
+    display:none;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+
+@media(max-width:600px){
+    h1{font-size:22px;}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="container" id="puzzle">
+    <h1>🧩 Sürprizi Aç!</h1>
+    <p>7 harfliyim 💖<br>
+    Bugün doğum günüm 🎂<br>
+    Ben kimim?</p>
+
+    <input type="text" id="answer" placeholder="Cevabı yaz...">
+    <br>
+    <button onclick="checkAnswer()">Kontrol Et 🔍</button>
+</div>
+
+<div class="container" id="surprise">
+    <h1>🎉 İYİ Kİ DOĞDUN BELİNAY 🎉</h1>
+    <p>Beşiktaş gibi güçlü, yıldızlar gibi parlak ol ✨🖤🤍</p>
+</div>
+
+<audio id="mars" src="mars.mp3"></audio>
+
+<script>
+function checkAnswer(){
+    let value = document.getElementById("answer").value.toLowerCase().trim();
+    
+    if(value === "belinay"){
+        document.getElementById("puzzle").style.display = "none";
+        document.getElementById("surprise").style.display = "block";
+        startFireworks();
+        document.getElementById("mars").play();
+    } else {
+        alert("Biraz daha düşün 😉");
+    }
+}
+
+/* Havai Fişek */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function createFirework(){
+    let x = Math.random()*canvas.width;
+    let y = Math.random()*canvas.height/2;
+    for(let i=0;i<80;i++){
+        particles.push({
+            x:x,
+            y:y,
+            speed:Math.random()*5,
+            angle:Math.random()*2*Math.PI,
+            radius:2,
+            life:100
+        });
+    }
+}
+
+function animate(){
+    ctx.fillStyle="rgba(0,0,0,0.2)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach((p,index)=>{
+        p.x += Math.cos(p.angle)*p.speed;
+        p.y += Math.sin(p.angle)*p.speed;
+        p.life--;
+
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+        ctx.fillStyle="hsl("+Math.random()*360+",100%,50%)";
+        ctx.fill();
+
+        if(p.life<=0){
+            particles.splice(index,1);
+        }
+    });
+
+    requestAnimationFrame(animate);
+}
+
+function startFireworks(){
+    setInterval(createFirework,700);
+}
+
+animate();
+</script>
+
+</body>
+</html>
